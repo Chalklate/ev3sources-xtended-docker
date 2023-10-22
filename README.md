@@ -1,4 +1,4 @@
-LEGO MINDSTORMS EV3 source code - Extended version 
+LEGO MINDSTORMS EV3 source code - Extended version + docker environment for compilation
 ===============================
 
 ## What this is 
@@ -20,30 +20,63 @@ See [the release announcement on BotBench][1] for more information.
 * Xander Soldaat, botbench.com/Robomatter
 * James Levitt, National Instruments
 
-## Things you will need
+## What this fork adds
+* Dockerfile + scripts to set up the environment
+* Added precompiled LabVIEW VM files (libvireo.so and libvireobridge.so)
+* Fixed kernel compile error in timeconst.pl
 
-* A Linux (virtual) installation.  I used Ubuntu 14.04 on VMware Workstation, but I am sure other combinations also work.   
+## Things you will need for compilation
+
+* A Linux (virtual) installation. I'm using Ubuntu 22.04 as the docker image uses 16.04 anyways, the host OS should not matter too much.
 The reason for the Linux installation requirement is due to the case-sensitive filenames used by the Linux kernel source repository. Attempting to clone the source repository to a non-case sensitive file system such as Mac OSX HFS+ or Windows FAT would result in a corrupted repository.
-* Eclipse.  I used Helios Service Release 1, but I know more recent versions will also work.
-* Java JRE (for Eclipse) - it seems to work fine with the Open Source JRE in the openjdk-7-jre package.
-* Code Sourcery Lite for ARM version 2009q1-203.  You can [download here directly][4].
-* The mkimage program from u-boot-tools package to compile kernel.
-* The convert program from imagemagick package.
-* A USB to serial port dongle.  You need to splice an NXT cable and hook up dig0 (pin 5) and dig1 (pin 6) to TX and RX, not 100% which way around.  GND is pin 3.  The brick’s console is on port 1 and has a baud rate of 115200 8N1.  I have a pre-made one with an NXT socket, it’s not actually as fancy as it sounds. A guide can be found [here][5].
-* An SD card to put your custom firmware on. It doesn’t use up a lot of space, but I’d stick with a simple 2GB one
-* A pair of flat-nosed pliers, for removing the SD card, or stick a tab to it, like in [this guide][7]
-* A Netgear WNA1100 WiFi dongle.  It is currently the only WiFi dongle that is supported by the EV3’s firmware.
+With docker this theoretically should be fine with any OS, but you would have to modify the Dockerfile to clone the repo directly within the container to preserve case-sensitivity, instead of linking it which I did for smaller image size + ease of access from the host.
+
+* Sourcery G++ Lite 2009q1-203 cross-compilation toolchain from [here](http://www.codesourcery.com/sgpp/lite/arm/portal/package4571/public/arm-none-linux-gnueabi/arm-2009q1-203-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2).
 
 ## Getting Started
 
 Use Git to clone this repo:
 
-    git clone https://github.com/mindboards/ev3sources-xtended.git
+    git clone https://github.com/Chalklate/ev3sources-xtended-docker.git
 
-The scripts in the EV3 sources expect the source code to live in a projects folder in your home directory. You will need to create a  projects symlink to the ev3sources folder that was created when you cloned the Git repo.
+Obtain CodeSourcery toolchain binaries and extract into the repo:
 
-To import this project in Eclipse, check out the [Wiki article][6]
+    wget -c http://www.codesourcery.com/sgpp/lite/arm/portal/package4571/public/arm-none-linux-gnueabi/arm-2009q1-203-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+    
+    mkdir ~/ev3sources-xtended-docker/CodeSourcery
+    
+    tar -jxvf ~/arm-2009q1-203-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2 -C ~/ev3sources-xtended-docker/CodeSourcery/
 
+Run the build script:
+
+    ./buildDockerImage.sh
+
+Run the container:
+
+    ./runDockerImage.sh
+    
+Enter the container:
+
+    ./enterShell.sh
+
+Your container is now ready. As a quick test you can do:
+
+    cd /home/ubuntu/projects/lms2012/open_first
+    make lms2012
+
+It should compile with no errors.
+
+## To compile a firmware image
+
+    cd /home/ubuntu/projects/lms2012/open_first
+    make all
+    ./make_image_EDU.sh
+
+The script should run with minimal/no errors. It will still generate an image even with errors, so check carefully.
+If successful you should now have a firmware file named ```EV3-image.xxxxx.bin```.
+You can flash this with the firmware update tool in EV3 Lab.
+    
+    
 ## Contributing
 
 To make changes to the source code, click on the **Fork** button at the top of this page. This will create a copy of this repository under your own GitHub account. You can make changes to this repository as you wish. [See this page for more information about Forking.][2]

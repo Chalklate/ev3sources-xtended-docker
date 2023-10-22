@@ -13,3 +13,4 @@ CVS
 modules.order
 Module.symvers
 !extra/linux-devkit/*/*.d
+!lms2012/lms2012/Linux_AM1808/3rdparty-vm/*.so

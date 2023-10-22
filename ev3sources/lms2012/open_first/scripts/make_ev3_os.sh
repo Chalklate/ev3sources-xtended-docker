@@ -14,7 +14,7 @@
 #fi
 
 CURRENTPATH=${PWD}
-PATH1=~/projects/lms2012
+PATH1=/home/ubuntu/projects/lms2012
 PATH2=open_first
 PATH3=lms2012/Linux_AM1808
 PATH4=/mnt/tmpdrv_fs/home/root/lms2012

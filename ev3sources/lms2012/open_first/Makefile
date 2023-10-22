@@ -17,6 +17,8 @@ include rules.mk
 
 LIBS = c_com c_input c_memory c_output c_sound c_ui c_dynload 
 
+all: lms2012 modules programs kernel u-boot
+
 almostall: lms2012 programs kernel modules
 
 lms2012:

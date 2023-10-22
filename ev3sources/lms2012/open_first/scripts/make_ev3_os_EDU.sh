@@ -14,7 +14,7 @@
 #fi
 
 CURRENTPATH=${PWD}
-PATH1=~/projects/lms2012
+PATH1=/home/ubuntu/projects/lms2012
 PATH2=open_first
 PATH3=lms2012/Linux_AM1808
 PATH4=/mnt/tmpdrv_fs/home/root/lms2012
@@ -30,11 +30,13 @@ cp -r  $PATH1/$PATH3/* $PATH4/
 
 #rm -r $PATH4/apps/Brick\ Datalog/
 cp -r $PATH1/lmssrc/Brick\ Datalog/Brick\ Datalog $PATH4/apps/
+cp -r $PATH1/lmssrc/Brick\ Name/Brick\ Name $PATH4/tools/
 
 cp $PATH1/$PATH2/fstab /mnt/tmpdrv_fs/etc/
 mkdir /mnt/tmpdrv_fs/media/card
 mkdir /mnt/tmpdrv_fs/media/usb
 
+mv $PATH4/3rdparty-vm /mnt/tmpdrv_ud/
 mv $PATH4/apps /mnt/tmpdrv_ud/
 mv $PATH4/prjs /mnt/tmpdrv_ud/
 mv $PATH4/sys/settings /mnt/tmpdrv_ud/
@@ -49,6 +51,7 @@ mkdir /mnt/tmpdrv_ud/prjs/BrkDL_SAVE
 mkdir /mnt/tmpdrv_ud/prjs/BrkDL_SAVE/CVS
 
 #rm $PATH5/rc5.d/S99lms
+ln -s /mnt/ramdisk/3rdparty-vm/ $PATH4/3rdparty-vm
 ln -s /mnt/ramdisk/apps/ $PATH4/apps
 ln -s /mnt/ramdisk/prjs/ $PATH4/prjs
 ln -s /mnt/ramdisk/settings/ $PATH4/sys/settings
@@ -70,6 +73,7 @@ chmod 755 $PATH4/../lms2012
 find $PATH4/tools/* -type f -name '*.*' -exec chmod 644 {} \;
 find $PATH4/sys/mod/* -type f -name '*.*' -exec chmod 644 {} \;
 find $PATH4/sys/ui/* -type f -name '*.*' -exec chmod 644 {} \;
+find /mnt/tmpdrv_ud/3rdparty-vm/* -type f -name '*.*' -exec chmod 644 {} \;
 find /mnt/tmpdrv_ud/apps/* -type f -name '*.*' -exec chmod 644 {} \;
 find /mnt/tmpdrv_ud/prjs/* -type f -name '*.*' -exec chmod 644 {} \;
 find /mnt/tmpdrv_ud/settings/* -type f -name '*.*' -exec chmod 644 {} \;
